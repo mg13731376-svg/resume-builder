@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>رزومه‌ساز آنلاین</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <style>
+    body {font-family: Vazirmatn, Tahoma, sans-serif; margin:0; background:#f5f7fa}
+    header {background:#1f2937; color:#fff; padding:1rem; text-align:center}
+    main {display:grid; grid-template-columns: 1fr 1fr; gap:1rem; padding:1rem}
+    .card {background:#fff; border-radius:12px; padding:1rem; box-shadow:0 4px 10px rgba(0,0,0,.1)}
+    h2 {margin-top:0; font-size:1.1rem}
+    label {display:block; margin-top:.5rem; font-size:.9rem}
+    input, textarea {width:100%; padding:.4rem; border-radius:6px; border:1px solid #ccc}
+    textarea {resize:vertical}
+    button {margin-top:1rem; padding:.6rem 1rem; border:none; border-radius:8px; background:#2563eb; color:#fff; cursor:pointer}
+    #resume {padding:1.5rem}
+    #resume h1 {margin:0}
+    .section {margin-top:1rem}
+    ul {padding-right:1.2rem}
+    @media(max-width:900px){ main{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+<header>
+  <h1>رزومه‌ساز آنلاین + خروجی PDF</h1>
+</header>
+
+<main>
+  <!-- Form -->
+  <div class="card">
+    <h2>اطلاعات رزومه</h2>
+
+    <label>نام و نام خانوادگی</label>
+    <input id="name" />
+
+    <label>عنوان شغلی</label>
+    <input id="title" />
+
+    <label>ایمیل</label>
+    <input id="email" />
+
+    <label>شماره تماس</label>
+    <input id="phone" />
+
+    <label>آدرس / شهر</label>
+    <input id="location" />
+
+    <label>خلاصه حرفه‌ای</label>
+    <textarea id="summary"></textarea>
+
+    <label>سوابق شغلی (هر مورد در یک خط)</label>
+    <textarea id="experience"></textarea>
+
+    <label>تحصیلات</label>
+    <textarea id="education"></textarea>
+
+    <label>مهارت‌ها (با ویرگول جدا شود)</label>
+    <textarea id="skills"></textarea>
+
+    <label>زبان‌ها</label>
+    <textarea id="languages"></textarea>
+
+    <label>دوره‌ها / گواهینامه‌ها</label>
+    <textarea id="certs"></textarea>
+
+    <button onclick="generateResume()">نمایش رزومه</button>
+    <button onclick="downloadPDF()">دانلود PDF</button>
+  </div>
+
+  <!-- Resume Preview -->
+  <div class="card" id="resume">
+    <h1 id="r_name"></h1>
+    <strong id="r_title"></strong>
+    <p id="r_contact"></p>
+
+    <div class="section">
+      <h3>خلاصه حرفه‌ای</h3>
+      <p id="r_summary"></p>
+    </div>
+
+    <div class="section">
+      <h3>سوابق شغلی</h3>
+      <ul id="r_experience"></ul>
+    </div>
+
+    <div class="section">
+      <h3>تحصیلات</h3>
+      <ul id="r_education"></ul>
+    </div>
+
+    <div class="section">
+      <h3>مهارت‌ها</h3>
+      <p id="r_skills"></p>
+    </div>
+
+    <div class="section">
+      <h3>زبان‌ها</h3>
+      <p id="r_languages"></p>
+    </div>
+
+    <div class="section">
+      <h3>دوره‌ها و گواهینامه‌ها</h3>
+      <ul id="r_certs"></ul>
+    </div>
+  </div>
+</main>
+
+<script>
+function listify(text){
+  return text.split('\n').filter(l=>l.trim()!='').map(i=>`<li>${i}</li>`).join('');
+}
+
+function generateResume(){
+  r_name.innerText = name.value;
+  r_title.innerText = title.value;
+  r_contact.innerText = `${email.value} | ${phone.value} | ${location.value}`;
+  r_summary.innerText = summary.value;
+  r_experience.innerHTML = listify(experience.value);
+  r_education.innerHTML = listify(education.value);
+  r_skills.innerText = skills.value;
+  r_languages.innerText = languages.value;
+  r_certs.innerHTML = listify(certs.value);
+}
+
+function downloadPDF(){
+  const element = document.getElementById('resume');
+  html2pdf().from(element).save('resume.pdf');
+}
+</script>
+</body>
+</html>
